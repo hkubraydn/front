@@ -8,7 +8,7 @@ import { getUserLocation } from './components/geolocation';
 
 export default function App() {
     <View>
-      <Text>Hello World</Text>
+      <Text>Hello!</Text>
     </View>
   const [region, setRegion] = useState(null);
   const [places, setPlaces] = useState([]);
