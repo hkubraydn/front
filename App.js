@@ -1,33 +1,48 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text } from 'react-native';
+import Map from './components/Map';
+import MapView, { Marker } from 'react-native-maps';
+import { fetchPlaces } from './apis/foursquareAPI';
+import { getUserLocation } from './components/geolocation';
+
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View>
+      <Text>Hello World</Text>
+    </View>
+  const [region, setRegion] = useState(null);
+  const [places, setPlaces] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-      <View style={styles.subContainer}>
-        <Text style={styles.textStyle}>Bu bir deneme yazısıdır!</Text>
+  useEffect(() => {
+    getUserLocation()
+      .then((coords) => {
+        const { latitude, longitude } = coords;
+        setRegion({
+          latitude,
+          longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        });
+
+        fetchPlaces(latitude, longitude).then((fetchedPlaces) => {
+          setPlaces(fetchedPlaces);
+        });
+      })
+      .catch((error) => setErrorMessage(error.message));
+  }, []);
+
+  if (!region) return <Text>Loading...</Text>;
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Map region={region} places={places} />
+      <View style={{ position: 'absolute', top: 50, left: 20 }}>
+        <Text>Nearby places:</Text>
+        {places.map((place, index) => (
+          <Text key={index}>{place.name}</Text>
+        ))}
       </View>
     </View>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  subContainer: {
-    backgroundColor: 'blue',
-    width: 70,
-    height: 80,
-    borderRadius: 5,
-  },
-  textStyle: {
-    color: 'white',
-  }
-});
+};

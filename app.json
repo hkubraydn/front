@@ -1,5 +1,6 @@
 {
   "expo": {
+    "platforms": ["ios", "android"],
     "name": "front",
     "slug": "front",
     "version": "1.0.0",
@@ -13,7 +14,13 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.yourapp.bundle",
+      "supportsTablet": true,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCWLICS9OkoTHo_Xoj2-N1OAhQy_2Xsd-Y"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -26,3 +33,6 @@
     }
   }
 }
+ 
+
+
